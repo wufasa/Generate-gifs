@@ -2,18 +2,19 @@ $(document).ready(function(){
     
     var topics = ["Obama","Donald Trump","Oprah","Steph Curry","Tom Cruise","Arnold Schwarzenegger", "Jackie Chan", "Bruce Lee", "Your mom"];
 
-    //generate buttons
-for(i=0;i<topics.length;i++){
-    var btn = $("<button>");
-    btn.attr("id",topics[i]);
-    btn.addClass("topic-button")
-    btn.val(topics[i]);
-    btn.text(topics[i]);
-    $("#topic-button").append(btn);
+function genBtn(){
+    for(i=0;i<topics.length;i++){
+        var btn = $("<button>");
+        btn.attr("id",topics[i]);
+        btn.addClass("topic-button")
+        btn.val(topics[i]);
+        btn.text(topics[i]);
+        $("#topic-button").append(btn);
+    }
 }
     
     //fill buttons with gifs
-    $(".topic-button").on("click", function() {
+    $(document).on("click",".topic-button", function() {
 
         var topic = $(this).attr("id");
         var limit = "&limit=10";
@@ -57,6 +58,20 @@ for(i=0;i<topics.length;i++){
             $(this).attr("src",still);
         }
     })
+    
+    $("form").submit(function(event){
+        var name = $("input:first").val();
+        console.log(name);
+        topics.push(name); 
+        console.log(topics);
+        $("#topic-button").empty();
+        genBtn();
+        event.preventDefault();
+});
+    
+    
+    genBtn();
+    
     
 })
 
