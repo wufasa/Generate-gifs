@@ -12,42 +12,51 @@ for(i=0;i<topics.length;i++){
     $("#topic-button").append(btn);
 }
     
-    //fill buttons with stuff
+    //fill buttons with gifs
     $(".topic-button").on("click", function() {
 
-      var topic = $(this).attr("id");
-      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        topic + "&api_key=dc6zaTOxFJmzC&limit=10";
+        var topic = $(this).attr("id");
+        var limit = "&limit=10";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        topic + "&api_key=LeymPQjvTQ3dy86pnKAcykGqL17rCV8g" + limit;
 
       $.ajax({
         url: queryURL,
         method: "GET"
       }).then(function(response) {
-          console.log(queryURL);
-          console.log(response);
           var results = response.data;
           for (var i = 0; i < results.length; i++) {
-
-            // Creating and storing a div tag
-            var topicDiv = $("<div>");
-
-            // Creating a paragraph tag with the result item's rating
-            var p = $("<p>").text("Rating: " + results[i].rating);
-
-            // Creating and storing an image tag
-            var topicImg = $("<img>");
-            // Setting the src attribute of the image to a property pulled off the result item
-            topicImg.attr("src", results[i].images.fixed_height.url);
-
-            // Appending the paragraph and image tag to the animalDiv
-            topicDiv.append(p);
-            topicDiv.append(topicImg);
-
-            // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
-            $("#topics").prepend(topicDiv);
+              var topicDiv = $("<div>");
+              var p = $("<p>").text("Rating: " + results[i].rating);
+              var topicImg = $("<img>");
+              topicImg.attr("src", results[i].images.fixed_height_still.url);
+              topicImg.addClass("gif");
+              topicImg.attr({
+                  "data-state": "still",
+                  still: results[i].images.fixed_height_still.url,
+                  animate: results[i].images.fixed_height.url
+                  
+              })
+              topicDiv.append(topicImg);
+              topicDiv.append(p);
+              $("#topics").prepend(topicDiv);
           }
         });
     });
+    
+    $(document).on("click",".gif",function() {
+        var state = $(this).attr("data-state")
+        if (state == "still"){
+            $(this).attr("data-state","animate");
+            var animate = $(this).attr("animate");
+            $(this).attr("src",animate);
+        }
+        else{
+            $(this).attr("data-state","still");
+            var still = $(this).attr("still");
+            $(this).attr("src",still);
+        }
+    })
     
 })
 
